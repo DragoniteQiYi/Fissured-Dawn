@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9620f8c34305754d8cc9a7e49e852d9, type: 3}
+  m_Name: DemoNodeGraph_zh-CN
+  m_EditorClassIdentifier: 
+  m_LocaleId:
+    m_Code: zh-CN
+  m_SharedData: {fileID: 11400000, guid: f5475e6fe92ef8b4e84387af526257a0, type: 2}
+  m_Metadata:
+    m_Items: []
+  m_TableData:
+  - m_Id: 32915985604411392
+    m_Localized: Welcome to the Dialog System Demo!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32915985671520256
+    m_Localized: cherrydev
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32915985671520257
+    m_Localized: You can create variables and change/show them in the dialog!
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32915985671520258
+    m_Localized: Your reputation is <color=yellow>{Reputation}</color>. Do you like
+      this tool?
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32915985671520259
+    m_Localized: Yes
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32915985671520260
+    m_Localized: No
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32915985671520261
+    m_Localized: 'I am very glad, your reputation is now: <color=yellow>{Reputation}</color>'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32915985671520262
+    m_Localized: 'It''s a pity, your reputation is now: <color=red>{Reputation}</color>'
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32915985671520263
+    m_Localized: Thank you for completing demo dialog node graph. Let's check the
+      final node, which depends on your reputation.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32915985671520264
+    m_Localized: Good outcome! Your reputation is above zero.
+    m_Metadata:
+      m_Items: []
+  - m_Id: 32915985671520265
+    m_Localized: 'Bad outcome! Your reputation is below zero '
+    m_Metadata:
+      m_Items: []
+  references:
+    version: 2
+    RefIds: []
