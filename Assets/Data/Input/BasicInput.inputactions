@@ -191,6 +191,17 @@
                 },
                 {
                     "name": "",
+                    "id": "538f908b-c48a-4753-8912-26e75c9d1fd2",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "d3fa74ef-a6a7-44bf-8ef0-a45706c46cdf",
                     "path": "<Keyboard>/leftShift",
                     "interactions": "",
@@ -219,7 +230,7 @@
                     "name": "Submit",
                     "type": "Button",
                     "id": "01ac25bd-c47b-4b6e-9a04-374a6dd0542f",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -228,7 +239,7 @@
                     "name": "Cancel",
                     "type": "Button",
                     "id": "0c966bd0-bfa0-4e39-bd03-3cd41064e6d4",
-                    "expectedControlType": "Button",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -292,6 +303,15 @@
                     "type": "PassThrough",
                     "id": "509192ce-53aa-4e38-b97c-f9a836920487",
                     "expectedControlType": "Quaternion",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Menu",
+                    "type": "Button",
+                    "id": "b0dce7be-77f3-440f-ad14-f5b6bf3b5267",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -713,6 +733,17 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8fae4044-e3e8-42e1-876e-e33a3aa903d3",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Menu",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

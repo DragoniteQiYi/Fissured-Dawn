@@ -13,7 +13,7 @@ namespace FissuredDawn.Core.Interfaces.GameManagers
         /// <summary>
         /// 按住疾跑键
         /// </summary>
-        event Action OnSprintStateChanged { add { } remove { } }
+        event Action<bool> OnSprintStateChanged { add { } remove { } }
 
         /// <summary>
         /// 按下交互键
@@ -51,5 +51,23 @@ namespace FissuredDawn.Core.Interfaces.GameManagers
         /// 禁用
         /// </summary>
         void Disable();
+
+        /// <summary>
+        /// 获取当前方向
+        /// </summary>
+        /// <returns></returns>
+        Vector2 GetCurrentDirection();
+
+        /// <summary>
+        /// 是否正在加速/疾跑
+        /// </summary>
+        /// <returns></returns>
+        bool IsSprinting();
+
+        /// <summary>
+        /// 组件是否已启用
+        /// </summary>
+        /// <returns></returns>
+        bool IsEnabled();
     }
 }
