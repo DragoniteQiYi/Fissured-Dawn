@@ -47,6 +47,7 @@ namespace FissuredDawn.Core.GameManagers
                 _playerInput.actions.Enable();
             }
             _isEnabled = true;
+            _isInitialized = true;
             Debug.Log("[InputManager]: 组件已启用");
         }
 

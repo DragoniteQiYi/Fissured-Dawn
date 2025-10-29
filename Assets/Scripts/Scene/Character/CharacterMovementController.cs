@@ -15,12 +15,11 @@ namespace FissuredDawn.Scene.Character
 
         [Header("移动属性")]
         [SerializeField] private float _speed = 2f;
-        [SerializeField] private float _sprintMultiplier = 1.5f;
+        [SerializeField] private float _sprintMultiplier = 2f;
 
         [Header("移动状态")]
         [SerializeField] private Vector2 _moveDirection;
         [SerializeField] private bool _isSprinting;
-        [SerializeField] private bool _isEnable = true;
 
         // 暴露事件
         public event Action<Vector2> OnMoveDirectionChanged;
@@ -29,16 +28,23 @@ namespace FissuredDawn.Scene.Character
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
+            Debug.Log("[CharacterMovementController]: 角色移动组件初始化成功");
         }
 
         private void OnEnable()
         {
-            RegisterMoveEvents();
+            if (_inputManager == null) return;
+
+            _inputManager.OnDirectionChanged += HandleDirectionChanged;
+            _inputManager.OnSprintStateChanged += HandleSprintStateChanged;
         }
 
         private void OnDisable()
         {
-            UnregisterMoveEvents();
+            if (_inputManager == null) return;
+
+            _inputManager.OnDirectionChanged -= HandleDirectionChanged;
+            _inputManager.OnSprintStateChanged -= HandleSprintStateChanged;
         }
 
         private void FixedUpdate()
@@ -55,22 +61,6 @@ namespace FissuredDawn.Scene.Character
             Vector2 velocity = _moveDirection * currentSpeed;
 
             _rigidbody.velocity = velocity;
-        }
-
-        private void RegisterMoveEvents()
-        {
-            if (_inputManager == null) return;
-
-            _inputManager.OnDirectionChanged += HandleDirectionChanged;
-            _inputManager.OnSprintStateChanged += HandleSprintStateChanged;
-        }
-
-        private void UnregisterMoveEvents()
-        {
-            if (_inputManager == null) return;
-
-            _inputManager.OnDirectionChanged -= HandleDirectionChanged;
-            _inputManager.OnSprintStateChanged -= HandleSprintStateChanged;
         }
 
         private void HandleDirectionChanged(Vector2 direction)

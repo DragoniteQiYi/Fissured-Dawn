@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 2775930344124597041}
   - component: {fileID: 2618406533084665689}
   - component: {fileID: 7254566166948113681}
-  - component: {fileID: 240148586222426865}
   - component: {fileID: 786279899119354425}
-  - component: {fileID: 1728880557937135436}
   - component: {fileID: -7468892371449850397}
+  - component: {fileID: 1728880557937135436}
+  - component: {fileID: 240148586222426865}
+  - component: {fileID: 991312047424915590}
   m_Layer: 0
   m_Name: Charmander
   m_TagString: Untagged
@@ -110,18 +111,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &240148586222426865
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 724410386451485486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f641b59cb5272cf449d19706ddb5275c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &786279899119354425
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -167,25 +156,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.35166606, y: 0.32276458}
   m_EdgeRadius: 0
---- !u!114 &1728880557937135436
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 724410386451485486}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 762f31ee37c5fa540b2fce8361e65e93, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  entityId: 
-  entityType: 0
-  displayName: Charmander
-  description: "\u6D4B\u8BD5\u5C0F\u706B\u9F99"
-  currentState: 0
-  isInteractable: 0
-  isPersistent: 0
 --- !u!50 &-7468892371449850397
 Rigidbody2D:
   serializedVersion: 4
@@ -213,3 +183,57 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &1728880557937135436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724410386451485486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 762f31ee37c5fa540b2fce8361e65e93, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  entityId: 
+  entityType: 0
+  displayName: Charmander
+  description: "\u6D4B\u8BD5\u5C0F\u706B\u9F99"
+  currentState: 0
+  isInteractable: 0
+  isPersistent: 0
+--- !u!114 &240148586222426865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724410386451485486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f641b59cb5272cf449d19706ddb5275c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rigidbody: {fileID: 0}
+  _speed: 2
+  _sprintMultiplier: 1.5
+  _moveDirection: {x: 0, y: 0}
+  _isSprinting: 0
+--- !u!114 &991312047424915590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724410386451485486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b1ce5ee393d0824482c3c9054e507e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movementController: {fileID: 0}
+  _animator: {fileID: 0}
+  _faceX: 0
+  _faceY: 0
+  _isMoving: 0
+  _isSprinting: 0
