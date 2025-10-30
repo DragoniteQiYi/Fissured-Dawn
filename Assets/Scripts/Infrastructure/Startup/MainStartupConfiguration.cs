@@ -1,4 +1,4 @@
-using FissuredDawn.Core.Interfaces.GameManagers;
+using FissuredDawn.Global.Interfaces.GameManagers;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;

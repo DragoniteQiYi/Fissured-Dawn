@@ -1,5 +1,5 @@
-﻿using FissuredDawn.Core.GameManagers;
-using FissuredDawn.Core.Interfaces.GameManagers;
+﻿using FissuredDawn.Global.GameManagers;
+using FissuredDawn.Global.Interfaces.GameManagers;
 using FissuredDawn.Infrastructure.Startup;
 using UnityEngine;
 using VContainer;
