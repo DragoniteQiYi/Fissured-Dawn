@@ -1,0 +1,14 @@
+{
+    "technic_test_base":{
+        "name": "测试场景",
+        "bgmId": null,
+        "sceneType": 0,
+        "children": []
+    },
+    "technic_menu_main":{
+        "name": "主菜单",
+        "bgmId": null,
+        "sceneType": 0,
+        "children": []
+    }
+}

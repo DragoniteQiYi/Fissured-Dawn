@@ -1,4 +1,4 @@
-namespace FissuredDawn.Data.Enums.Core
+namespace FissuredDawn.Shared.Enums.Core
 {
     /// <summary>
     /// 场景类型枚举

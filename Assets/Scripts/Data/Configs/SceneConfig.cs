@@ -1,4 +1,4 @@
-using FissuredDawn.Data.Enums.Core;
+using FissuredDawn.Shared.Enums.Core;
 using System;
 using System.Collections.Generic;
 
@@ -10,10 +10,10 @@ namespace FissuredDawn.Data.Configs
     [Serializable]
     public class SceneConfig
     {
-        /// <summary>
-        /// 场景ID
-        /// </summary>
-        public string Id;
+        ///// <summary>
+        ///// 场景ID
+        ///// </summary>
+        //public string Id;
 
         /// <summary>
         /// 场景名
@@ -33,6 +33,6 @@ namespace FissuredDawn.Data.Configs
         /// <summary>
         /// 子场景
         /// </summary>
-        public List<SceneConfig> Children;
+        public List<string> Children;
     }
 }
