@@ -1,4 +1,4 @@
-using FissuredDawn.Scope.Exploration.GameManagers;
+using FissuredDawn.Scope.Exploration.Generated.Character;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;

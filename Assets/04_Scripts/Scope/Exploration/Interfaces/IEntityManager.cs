@@ -2,7 +2,7 @@ using FissuredDawn.Data.Exploration;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace FissuredDawn.Scope.Exploration.GameManagers
+namespace FissuredDawn.Scope.Exploration.Interfaces
 {
     public interface IEntityManager<TEntity> where TEntity : MonoBehaviour
     {

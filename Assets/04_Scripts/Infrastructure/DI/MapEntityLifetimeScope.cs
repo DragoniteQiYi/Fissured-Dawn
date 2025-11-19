@@ -1,6 +1,7 @@
 using FissuredDawn.Data.Exploration;
 using FissuredDawn.Infrastructure.Startup;
-using FissuredDawn.Scope.Exploration.GameManagers;
+using FissuredDawn.Scope.Exploration.Generated.Character;
+using FissuredDawn.Scope.Exploration.Interfaces;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;

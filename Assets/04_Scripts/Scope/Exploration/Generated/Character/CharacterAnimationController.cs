@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace FissuredDawn.Scope.Exploration.Character
+namespace FissuredDawn.Scope.Exploration.Generated.Character
 {
     [RequireComponent(typeof(Animator))]
     public class CharacterAnimationController : MonoBehaviour

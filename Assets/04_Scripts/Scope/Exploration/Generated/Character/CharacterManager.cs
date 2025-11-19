@@ -1,4 +1,5 @@
 using FissuredDawn.Data.Exploration;
+using FissuredDawn.Scope.Exploration.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace FissuredDawn.Scope.Exploration.GameManagers
+namespace FissuredDawn.Scope.Exploration.Generated.Character
 {
     public class CharacterManager : MonoBehaviour, IEntityManager<MapCharacter>
     {

@@ -3,7 +3,7 @@ using System;
 using UnityEngine;
 using VContainer;
 
-namespace FissuredDawn.Scope.Exploration.Character
+namespace FissuredDawn.Scope.Exploration.Generated.Character
 {
     [RequireComponent(typeof(Rigidbody2D))]
     public class CharacterMovementController : MonoBehaviour
