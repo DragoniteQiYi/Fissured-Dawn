@@ -1,4 +1,5 @@
-﻿using FissuredDawn.Global.GameManagers;
+﻿using FissuredDawn.Global;
+using FissuredDawn.Global.GameManagers;
 using FissuredDawn.Global.GameServices;
 using FissuredDawn.Global.Interfaces.GameManagers;
 using FissuredDawn.Global.Interfaces.GameServices;
@@ -35,6 +36,12 @@ namespace FissuredDawn.Infrastructure.DI
 
             // 注册初始化器
             builder.RegisterEntryPoint<MainStartupConfiguration>();
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            GlobalServiceLocator.SetContainer(Container);
         }
     }
 }

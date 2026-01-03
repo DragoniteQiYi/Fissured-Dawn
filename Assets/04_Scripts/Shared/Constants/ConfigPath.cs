@@ -7,7 +7,7 @@ namespace FissuredDawn.Shared.Constants
 {
     public static class ConfigPath
     {
-        private static readonly string BasePath = Path.Combine(Application.dataPath, "Data", "Configs");
+        private static readonly string BasePath = Path.Combine(Application.dataPath, "03_Data", "Configs");
 
         public static readonly string SceneConfigPath = 
             Path.Combine(BasePath, "Scenes.json");

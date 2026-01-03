@@ -7,6 +7,10 @@ namespace FissuredDawn.Global.Interfaces.GameServices
 {
     public interface ISceneLoader
     {
+        bool IsInitialized { get; }
+
+        event Action OnInitialized;
+
         /// <summary>
         /// ≥ı ºªØ≥°æ∞≈‰÷√
         /// </summary>

@@ -9,9 +9,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.ResourceManagement.ResourceProviders;
+using UnityEngine.SceneManagement;
 
 namespace FissuredDawn.Global.GameServices
 {
@@ -32,6 +33,10 @@ namespace FissuredDawn.Global.GameServices
         private bool _isInitialized = false;
         private HashSet<string> _loadedScenes = new();
         private string _currentSceneId;
+        private AsyncOperationHandle<SceneInstance> _currentSceneHandle;
+
+        public bool IsInitialized { get => _isInitialized; }
+        public event Action OnInitialized;
 
         public async UniTask InitializeAsync()
         {
@@ -50,6 +55,7 @@ namespace FissuredDawn.Global.GameServices
                 await LoadSceneConfigsAsync(configPath);
 
                 _isInitialized = true;
+                OnInitialized?.Invoke();
                 Debug.Log($"[SceneLoader]: 场景加载器初始化完成，共加载 {_sceneConfigs.Count} 个场景配置");
             }
             catch (Exception ex)
@@ -77,13 +83,13 @@ namespace FissuredDawn.Global.GameServices
             {
                 throw new ArgumentException($"[SceneLoader]: 场景ID '{sceneId}' 不存在");
             }
+            AsyncOperationHandle<SceneInstance>? sceneHandle = null;
+
             try
             {
-                // TODO: 资源加载逻辑
                 var config = GetSceneConfig(sceneId);
-                string scenePath = Path.Combine(ResourcePath.ScenePath, config.SceneName);
 
-                Debug.Log($"[SceneLoader]: 开始加载场景 {sceneId}，路径: {scenePath}");
+                Debug.Log($"[SceneLoader]: 开始通过Addressable加载场景 {sceneId}");
 
                 // 如果有当前场景，先卸载
                 if (!string.IsNullOrEmpty(_currentSceneId) && _currentSceneId != sceneId)
@@ -91,11 +97,54 @@ namespace FissuredDawn.Global.GameServices
                     await UnloadCurrentSceneAsync();
                 }
 
-                // 使用Addressable或Resources加载场景
-                await LoadSceneWithProgressAsync(scenePath, loadTypes[config.SceneType],
-                    progress, cancellationToken);
+                // 通过Addressable加载场景
+                var loadSceneMode = loadTypes[config.SceneType];
+
+                var loadParams = new LoadSceneParameters(loadSceneMode);
+
+                // 使用Addressable加载场景
+                sceneHandle = Addressables.LoadSceneAsync(
+                    sceneId, // 使用Addressable的key而不是路径
+                    loadParams,
+                    activateOnLoad: true
+                );
+
+                // 进度回调
+                if (progress != null)
+                {
+                    while (!sceneHandle.Value.IsDone)
+                    {
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            if (sceneHandle.HasValue)
+                            {
+                                Addressables.Release(sceneHandle.Value);
+                            }
+                            cancellationToken.ThrowIfCancellationRequested();
+                        }
+
+                        progress.Report(sceneHandle.Value.PercentComplete);
+                        await UniTask.Yield();
+                    }
+                }
+                else
+                {
+                    await sceneHandle.Value.WithCancellation(cancellationToken);
+                }
+
+                // 等待场景完全激活
+                if (sceneHandle.Value.Result.Scene.isLoaded)
+                {
+                    sceneHandle.Value.Result.ActivateAsync().completed += (op) =>
+                    {
+                        Debug.Log($"[SceneLoader]: 场景 {sceneId} 已激活");
+                    };
+
+                    await UniTask.WaitUntil(() => sceneHandle.Value.Result.Scene.isLoaded);
+                }
 
                 _currentSceneId = sceneId;
+                _currentSceneHandle = sceneHandle.Value; // 保存句柄以便后续卸载
                 _loadedScenes.Add(sceneId);
 
                 Debug.Log($"[SceneLoader]: 场景 {sceneId} 加载完成");
@@ -103,11 +152,25 @@ namespace FissuredDawn.Global.GameServices
             catch (OperationCanceledException)
             {
                 Debug.Log($"[SceneLoader]: 场景 {sceneId} 加载被取消");
+
+                // 取消时清理资源
+                if (sceneHandle.HasValue)
+                {
+                    Addressables.Release(sceneHandle.Value);
+                }
+
                 throw;
             }
             catch (Exception ex)
             {
                 Debug.LogError($"[SceneLoader]: 加载场景 {sceneId} 失败: {ex.Message}");
+
+                // 异常时清理资源
+                if (sceneHandle.HasValue)
+                {
+                    Addressables.Release(sceneHandle.Value);
+                }
+
                 throw;
             }
         }
@@ -177,7 +240,30 @@ namespace FissuredDawn.Global.GameServices
 
         public bool SceneExists(string sceneId)
         {
-            return _sceneConfigs.ContainsKey(sceneId);
+            if (_sceneConfigs == null)
+            {
+                Debug.LogError($"[SceneLoader] _sceneConfigs 是 null!");
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(sceneId))
+            {
+                Debug.LogWarning($"[SceneLoader] 场景ID为空");
+                return false;
+            }
+
+            Debug.Log($"[SceneLoader] 检查场景ID: '{sceneId}'");
+            Debug.Log($"[SceneLoader] 配置数量: {_sceneConfigs.Count}");
+
+            bool exists = _sceneConfigs.ContainsKey(sceneId);
+            Debug.Log($"[SceneLoader] 存在: {exists}");
+
+            if (!exists)
+            {
+                Debug.Log($"[SceneLoader] 可用ID: {string.Join(", ", _sceneConfigs.Keys)}");
+            }
+
+            return exists;
         }
 
         public async UniTask UnloadSceneAsync(string sceneId)
@@ -193,7 +279,7 @@ namespace FissuredDawn.Global.GameServices
                 var config = GetSceneConfig(sceneId);
                 string sceneName = config.SceneName;
 
-                var unloadOperation = UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(sceneName);
+                var unloadOperation = SceneManager.UnloadSceneAsync(sceneName);
                 if (unloadOperation != null)
                 {
                     await unloadOperation;
@@ -231,6 +317,10 @@ namespace FissuredDawn.Global.GameServices
 
                 // 反序列化JSON
                 _sceneConfigs = JsonConvert.DeserializeObject<Dictionary<string, SceneConfig>>(jsonContent);
+                foreach (var sceneConfig in _sceneConfigs)
+                {
+                    Debug.Log(sceneConfig.Key + ": " + sceneConfig.Value);
+                }
 
                 if (_sceneConfigs.Count == 0)
                 {
@@ -244,60 +334,14 @@ namespace FissuredDawn.Global.GameServices
             }
         }
 
-        private async UniTask LoadSceneWithProgressAsync(string scenePath, LoadSceneMode loadMode,
+
+
+        private async UniTask LoadSceneAsync(string scenePath, LoadSceneMode loadMode,
             IProgress<float> progress, CancellationToken cancellationToken)
         {
-            // 方法1: 使用Unity内置的SceneManager
             try
             {
-                var loadOperation = SceneManager.LoadSceneAsync(scenePath,
-                    new LoadSceneParameters
-                    {
-                        loadSceneMode = loadMode
-                    });
-
-                if (loadOperation == null)
-                {
-                    throw new InvalidOperationException($"无法加载场景: {scenePath}");
-                }
-
-                loadOperation.allowSceneActivation = false;
-
-                // 模拟进度更新（实际加载进度只能到0.9）
-                while (!loadOperation.isDone)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    float loadProgress = Mathf.Clamp01(loadOperation.progress / 0.9f);
-                    progress?.Report(loadProgress);
-
-                    if (loadOperation.progress >= 0.9f)
-                    {
-                        // 加载完成，激活场景
-                        loadOperation.allowSceneActivation = true;
-                    }
-
-                    await UniTask.Yield();
-                }
-
-                progress?.Report(1.0f);
-            }
-            catch (Exception)
-            {
-                // 如果内置方法失败，尝试使用Addressables
-                await LoadSceneWithAddressablesAsync(scenePath, loadMode, progress, cancellationToken);
-            }
-        }
-
-        private async UniTask LoadSceneWithAddressablesAsync(string scenePath, LoadSceneMode loadMode,
-            IProgress<float> progress, CancellationToken cancellationToken)
-        {
-            // 方法2: 使用Addressable系统
-            try
-            {
-#if UNITY_EDITOR || USING_ADDRESSABLES
                 var handle = Addressables.LoadSceneAsync(scenePath, loadMode);
-
                 while (!handle.IsDone)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
@@ -307,11 +351,8 @@ namespace FissuredDawn.Global.GameServices
 
                 if (handle.Status == AsyncOperationStatus.Failed)
                 {
-                    throw new Exception($"Addressable场景加载失败: {scenePath}");
+                    throw new Exception($"[SceneLoader]: Addressable场景加载失败: {scenePath}");
                 }
-#else
-                throw new NotSupportedException("Addressable系统未启用");
-#endif
             }
             catch (Exception ex)
             {
@@ -320,12 +361,104 @@ namespace FissuredDawn.Global.GameServices
             }
         }
 
+        //        private async UniTask LoadSceneWithProgressAsync(string scenePath, LoadSceneMode loadMode,
+        //            IProgress<float> progress, CancellationToken cancellationToken)
+        //        {
+        //            // 方法1: 使用Unity内置的SceneManager
+        //            try
+        //            {
+        //                var loadOperation = SceneManager.LoadSceneAsync(scenePath,
+        //                    new LoadSceneParameters
+        //                    {
+        //                        loadSceneMode = loadMode
+        //                    });
+
+        //                if (loadOperation == null)
+        //                {
+        //                    throw new InvalidOperationException($"无法加载场景: {scenePath}");
+        //                }
+
+        //                loadOperation.allowSceneActivation = false;
+
+        //                // 模拟进度更新（实际加载进度只能到0.9）
+        //                while (!loadOperation.isDone)
+        //                {
+        //                    cancellationToken.ThrowIfCancellationRequested();
+
+        //                    float loadProgress = Mathf.Clamp01(loadOperation.progress / 0.9f);
+        //                    progress?.Report(loadProgress);
+
+        //                    if (loadOperation.progress >= 0.9f)
+        //                    {
+        //                        // 加载完成，激活场景
+        //                        loadOperation.allowSceneActivation = true;
+        //                    }
+
+        //                    await UniTask.Yield();
+        //                }
+
+        //                progress?.Report(1.0f);
+        //            }
+        //            catch (Exception)
+        //            {
+        //                // 如果内置方法失败，尝试使用Addressables
+        //                await LoadSceneWithAddressablesAsync(scenePath, loadMode, progress, cancellationToken);
+        //            }
+        //        }
+
+        //        private async UniTask LoadSceneWithAddressablesAsync(string scenePath, LoadSceneMode loadMode,
+        //            IProgress<float> progress, CancellationToken cancellationToken)
+        //        {
+        //            // 方法2: 使用Addressable系统
+        //            try
+        //            {
+        //#if UNITY_EDITOR || USING_ADDRESSABLES
+        //                var handle = Addressables.LoadSceneAsync(scenePath, loadMode);
+
+        //                while (!handle.IsDone)
+        //                {
+        //                    cancellationToken.ThrowIfCancellationRequested();
+        //                    progress?.Report(handle.PercentComplete);
+        //                    await UniTask.Yield();
+        //                }
+
+        //                if (handle.Status == AsyncOperationStatus.Failed)
+        //                {
+        //                    throw new Exception($"Addressable场景加载失败: {scenePath}");
+        //                }
+        //#else
+        //                throw new NotSupportedException("Addressable系统未启用");
+        //#endif
+        //            }
+        //            catch (Exception ex)
+        //            {
+        //                Debug.LogError($"[SceneLoader]: Addressable加载失败: {ex.Message}");
+        //                throw;
+        //            }
+        //        }
+
+        // 对应的卸载方法
         private async UniTask UnloadCurrentSceneAsync()
         {
+            if (_currentSceneHandle.IsValid())
+            {
+                Debug.Log($"[SceneLoader]: 开始卸载场景 {_currentSceneId}");
+
+                await Addressables.UnloadSceneAsync(
+                    _currentSceneHandle,
+                    autoReleaseHandle: true
+                ).Task.AsUniTask();
+
+                Debug.Log($"[SceneLoader]: 场景 {_currentSceneId} 卸载完成");
+            }
+
             if (!string.IsNullOrEmpty(_currentSceneId))
             {
-                await UnloadSceneAsync(_currentSceneId);
+                _loadedScenes.Remove(_currentSceneId);
             }
+
+            _currentSceneId = null;
+            _currentSceneHandle = default;
         }
 
         private async UniTask GarbageCollectAsync()

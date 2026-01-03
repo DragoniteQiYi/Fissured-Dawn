@@ -23,5 +23,10 @@ namespace FissuredDawn.Shared.Enums.Exploration
         /// 交互触发
         /// </summary>
         Interact = 2,
+
+        /// <summary>
+        /// 永不触发
+        /// </summary>
+        None = 3
     }
 }
