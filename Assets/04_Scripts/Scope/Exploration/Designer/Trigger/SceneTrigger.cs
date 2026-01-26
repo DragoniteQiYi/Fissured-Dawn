@@ -72,8 +72,6 @@ namespace FissuredDawn.Scope.Exploration.Designer.Trigger
 
                 Debug.Log($"[SceneTrigger]：开始加载场景 {_sceneId}");
 
-                
-
                 // 使用CancellationToken.None表示不可取消
                 await _sceneLoader.LoadSceneAsync(_sceneId, CancellationToken.None);
 

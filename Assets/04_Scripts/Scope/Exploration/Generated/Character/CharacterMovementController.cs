@@ -5,6 +5,9 @@ using VContainer;
 
 namespace FissuredDawn.Scope.Exploration.Generated.Character
 {
+    /// <summary>
+    /// 这个脚本用于控制玩家角色在探索地图中移动
+    /// </summary>
     [RequireComponent(typeof(Rigidbody2D))]
     public class CharacterMovementController : MonoBehaviour
     {

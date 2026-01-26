@@ -288,8 +288,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1550372147}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1183783017
@@ -339,7 +338,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2130740648}
-  m_Father: {fileID: 1183783016}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2130740647
 GameObject:
@@ -352,7 +351,7 @@ GameObject:
   - component: {fileID: 2130740648}
   - component: {fileID: 2130740649}
   m_Layer: 0
-  m_Name: SceneTrigger
+  m_Name: AutoSceneTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -385,7 +384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8869f64cd2f935d469641653cb3dab1b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _name: "\u5927\u6492\u5E01"
+  _name: "\u8DF3\u8F6C\u5230\u6807\u9898\u754C\u9762"
   _triggerType: 1
   _sceneId: Scenes/Test/Test/SampleScene
   _enabled: 1
@@ -395,3 +394,4 @@ SceneRoots:
   m_Roots:
   - {fileID: 216459102}
   - {fileID: 1183783016}
+  - {fileID: 1550372147}
