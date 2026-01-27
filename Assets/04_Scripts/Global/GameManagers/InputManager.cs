@@ -20,6 +20,7 @@ namespace FissuredDawn.Global.GameManagers
         public event Action<Vector2> OnDirectionChanged;
         public event Action<bool> OnSprintStateChanged;
         public event Action OnInteractPressed;
+        public event Action OnInteractReleased;
         public event Action OnMenuPressed;
         public event Action OnConfirmPressed;
         public event Action OnCancelPressed;
@@ -81,6 +82,7 @@ namespace FissuredDawn.Global.GameManagers
             _sprintAction.started += OnSprintStarted;
             _sprintAction.canceled += OnSprintCanceled;
             _interactAction.performed += OnInteractPerformed;
+            _interactAction.canceled += OnInteractEnd;
             _menuAction.performed += OnMenuPerformed;
             //_submitAction.performed += OnSubmitPerformed;
             //_cancelAction.performed += OnCancelPerformed;
@@ -115,6 +117,12 @@ namespace FissuredDawn.Global.GameManagers
         {
             if (!_isEnabled) return;
             OnInteractPressed?.Invoke();
+        }
+
+        private void OnInteractEnd(InputAction.CallbackContext context)
+        {
+            if (!_isEnabled) return;
+            OnInteractReleased?.Invoke();
         }
 
         private void OnMenuPerformed(InputAction.CallbackContext context)
@@ -156,6 +164,7 @@ namespace FissuredDawn.Global.GameManagers
             if (_interactAction != null)
             {
                 _interactAction.performed -= OnInteractPerformed;
+                _interactAction.canceled -= OnInteractEnd;
             }
 
             if (_menuAction != null)

@@ -19,8 +19,8 @@ namespace FissuredDawn.Data.Exploration
     {
         Character,
         NPC,
-        Interactive,
-        Collectible,
+        Environment,
+        Collectable,
         Portal
     }
 }

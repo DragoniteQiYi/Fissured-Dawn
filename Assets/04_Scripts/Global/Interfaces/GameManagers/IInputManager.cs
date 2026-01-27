@@ -21,6 +21,11 @@ namespace FissuredDawn.Global.Interfaces.GameManagers
         event Action OnInteractPressed { add { } remove { } }
 
         /// <summary>
+        /// 松开交互键
+        /// </summary>
+        event Action OnInteractReleased { add { } remove { } }
+
+        /// <summary>
         /// 按下菜单键
         /// </summary>
         event Action OnMenuPressed { add { } remove { } }

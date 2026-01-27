@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1728880557937135436}
   - component: {fileID: 240148586222426865}
   - component: {fileID: 991312047424915590}
+  - component: {fileID: -5201233529502445046}
   m_Layer: 0
   m_Name: Charmander
   m_TagString: Untagged
@@ -200,7 +201,8 @@ MonoBehaviour:
   displayName: Charmander
   description: "\u6D4B\u8BD5\u5C0F\u706B\u9F99"
   currentState: 0
-  isInteractable: 0
+  facingDirection: {x: 0, y: 0}
+  isVisible: 1
   isPersistent: 0
 --- !u!114 &240148586222426865
 MonoBehaviour:
@@ -237,3 +239,35 @@ MonoBehaviour:
   _faceY: 0
   _isMoving: 0
   _isSprinting: 0
+--- !u!114 &-5201233529502445046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 724410386451485486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1aa41f80b88097478a17d7402581762, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _character: {fileID: 0}
+  _transform: {fileID: 0}
+  _interactionRange: 2
+  _interactionAngle: 60
+  _interactionLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  _obstructionLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  _raycastDirection: {x: 0, y: 0}
+  _boxCastWidth: 0.5
+  _boxCastHeight: 1
+  _targetUpdateInterval: 0.1
+  _showDebugRay: 1
+  _rayColor: {r: 0, g: 1, b: 0, a: 1}
+  _hitRayColor: {r: 1, g: 0, b: 0, a: 1}
+  _currentTarget: {fileID: 0}
+  _targetCheckTimer: 0
+  _isInteracting: 0

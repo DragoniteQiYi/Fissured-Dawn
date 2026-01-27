@@ -1,3 +1,4 @@
+using FissuredDawn.Data.Exploration;
 using UnityEngine;
 
 namespace FissuredDawn.Scope.Exploration.Generated.Character
@@ -6,6 +7,7 @@ namespace FissuredDawn.Scope.Exploration.Generated.Character
     public class CharacterAnimationController : MonoBehaviour
     {
         [Header("引用组件")]
+        [SerializeField] private MapCharacter _character;
         [SerializeField] private CharacterMovementController _movementController;
         [SerializeField] private Animator _animator;
 
@@ -22,9 +24,21 @@ namespace FissuredDawn.Scope.Exploration.Generated.Character
 
         private void Awake()
         {
+            _character = GetComponent<MapCharacter>();
             _movementController = GetComponent<CharacterMovementController>();
             _animator = GetComponent<Animator>();
             Debug.Log("[CharacterAnimationController]: 角色动画组件初始化成功");
+        }
+
+        private void Start()
+        {
+            if (_faceX == 0 && _faceY == 0)
+            {
+                _faceX = _character.FacingDirection.x;
+                _faceY = _character.FacingDirection.y;
+            }
+            _animator.SetFloat(_faceXHash, _faceX);
+            _animator.SetFloat(_faceYHash, _faceY);
         }
 
         private void OnEnable()
