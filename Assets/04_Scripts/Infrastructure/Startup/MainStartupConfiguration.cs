@@ -8,13 +8,19 @@ using VContainer.Unity;
 
 namespace FissuredDawn.Infrastructure.Startup
 {
+    /*
+     *  这个脚本是为了保证：
+     *  游戏运行时，所有的核心系统已初始化
+     */
     /// <summary>
-    /// 所有程序的入口
+    /// 系统初始化总线
     /// </summary>
     public class MainStartupConfiguration : IStartable
     {
         #region MonoBehaviour依赖
         [Inject] private readonly IInputManager _inputManager;
+        [Inject] private readonly IDialogManager _dialogManager;
+        [Inject] private readonly IUIManager _uiManager;
         #endregion
 
         #region 纯C#类
@@ -31,6 +37,8 @@ namespace FissuredDawn.Infrastructure.Startup
         private void InitializeSync()
         {
             _inputManager.Initialize();
+            _dialogManager.Initialize();
+            _uiManager.Initialize();
         }
 
         private async UniTaskVoid InitializeAsync()

@@ -1,3 +1,5 @@
+using FissuredDawn.Global.Interfaces.GameManagers;
+using FissuredDawn.Infrastructure.DI;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +9,7 @@ using UnityEngine.Events;
 #if UNITY_LOCALIZATION
 using UnityEngine.Localization;
 using UnityEngine.Localization.Settings;
+using VContainer;
 #endif
 
 namespace cherrydev
@@ -14,7 +17,6 @@ namespace cherrydev
     public class DialogBehaviour : MonoBehaviour
     {
         [SerializeField] private float _dialogCharDelay;
-        [SerializeField] private List<KeyCode> _nextSentenceKeyCodes;
         [SerializeField] private bool _isCanSkippingText = true;
 #if UNITY_LOCALIZATION
         [SerializeField] private bool _reloadTextOnLanguageChange = true;
@@ -23,6 +25,8 @@ namespace cherrydev
         [Space(10)] 
         [SerializeField] private UnityEvent _onDialogStarted;
         [SerializeField] private UnityEvent _onDialogFinished;
+
+        private IInputManager _inputManager;
 
         private DialogNodeGraph _currentNodeGraph;
         private Node _currentNode;
@@ -85,7 +89,15 @@ namespace cherrydev
         public DialogExternalFunctionsHandler ExternalFunctionsHandler { get; private set; }
         public DialogVariablesHandler VariablesHandler => _variablesHandler;
 
-        private void Awake() => ExternalFunctionsHandler = new DialogExternalFunctionsHandler();
+        private void Awake()
+        {
+            ExternalFunctionsHandler = new DialogExternalFunctionsHandler();
+        }
+
+        private void Start()
+        {
+            _inputManager = GlobalServiceLocator.Container.Resolve<IInputManager>();
+        }
 
         private void OnEnable()
         {
@@ -93,6 +105,10 @@ namespace cherrydev
             if (_reloadTextOnLanguageChange)
                 LocalizationSettings.SelectedLocaleChanged += OnSelectedLocaleChanged;
 #endif
+            if (_inputManager != null)
+            {
+                _inputManager.OnInteractPressed += HandleSentenceSkipping;
+            }     
         }
 
 #if UNITY_LOCALIZATION
@@ -136,6 +152,10 @@ namespace cherrydev
             if (_reloadTextOnLanguageChange)
                 LocalizationSettings.SelectedLocaleChanged -= OnSelectedLocaleChanged;
 #endif
+            if (_inputManager != null)
+            {
+                _inputManager.OnInteractPressed -= HandleSentenceSkipping;
+            }
 
             if (_variablesHandler != null)
             {
@@ -144,7 +164,7 @@ namespace cherrydev
             }
         }
 
-        private void Update() => HandleSentenceSkipping();
+        //private void Update() => HandleSentenceSkipping();
 
         /// <summary>
         /// Disable dialog panel
@@ -156,12 +176,6 @@ namespace cherrydev
         /// </summary>
         /// <param name="value"></param>
         public void SetCharDelay(float value) => _dialogCharDelay = value;
-
-        /// <summary>
-        /// Setting nextSentenceKeyCodes
-        /// </summary>
-        /// <param name="keyCodes"></param>
-        public void SetNextSentenceKeyCodes(List<KeyCode> keyCodes) => _nextSentenceKeyCodes = keyCodes;
 
         /// <summary>
         /// Start a dialog
@@ -643,6 +657,18 @@ namespace cherrydev
             _isCurrentSentenceTyping = true;
             SentenceStarted?.Invoke();
 
+            bool doNextSentence = false;
+            Action nextSentence = () =>
+            {
+                // 只有不在打字时才允许下一句
+                if (!_isCurrentSentenceTyping)
+                {
+                    Debug.Log("[DialogBehaviour]: 直接显示当前对话语句");
+                    doNextSentence = true;
+                }
+            };
+            _inputManager.OnInteractReleased += nextSentence;
+
             foreach (char textChar in text)
             {
                 if (_isCurrentSentenceSkipped)
@@ -660,7 +686,8 @@ namespace cherrydev
             _isCurrentSentenceTyping = false;
             SentenceEnded?.Invoke();
 
-            yield return new WaitUntil(() => CheckNextSentenceKeyCodes() && IsActive);
+            yield return new WaitUntil(() => doNextSentence && IsActive);
+            _inputManager.OnInteractReleased -= nextSentence;
 
             CheckForDialogNextNode();
         }
@@ -732,26 +759,15 @@ namespace cherrydev
         /// </summary>
         private void HandleSentenceSkipping()
         {
+            
             if (!_isDialogStarted || !_isCanSkippingText)
                 return;
 
-            if (CheckNextSentenceKeyCodes() && !_isCurrentSentenceSkipped)
+            Debug.Log("[DialogBehaviour]: 尝试跳过对话");
+            //if (CheckNextSentenceKeyCodes() && !_isCurrentSentenceSkipped)
+            //    _isCurrentSentenceSkipped = true;
+            if (!_isCurrentSentenceSkipped)
                 _isCurrentSentenceSkipped = true;
-        }
-
-        /// <summary>
-        /// Checking whether at least one key from the nextSentenceKeyCodes was pressed
-        /// </summary>
-        /// <returns></returns>
-        private bool CheckNextSentenceKeyCodes()
-        {
-            for (int i = 0; i < _nextSentenceKeyCodes.Count; i++)
-            {
-                if (Input.GetKeyDown(_nextSentenceKeyCodes[i]))
-                    return true;
-            }
-
-            return false;
         }
     }
 }

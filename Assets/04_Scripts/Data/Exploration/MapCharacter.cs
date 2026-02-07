@@ -5,28 +5,28 @@ using VContainer;
 
 namespace FissuredDawn.Data.Exploration
 {
-    public class MapCharacter : MapEntity
+    public class MapCharacter : MonoBehaviour
     {
         [Inject] private IInputManager _inputManager;
 
-        protected new EntityType entityType = EntityType.Character;
+        [SerializeField] private Vector2 _facingDirection;
 
+        public Vector2 FacingDirection => _facingDirection;
         public event Action<Vector2> OnDirectionChanged;
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-            if (facingDirection == Vector2.zero)
+            if (_facingDirection == Vector2.zero)
             {
-                facingDirection = Vector2.down;
+                _facingDirection = Vector2.down;
             }
             _inputManager.OnDirectionChanged += HandleDirectionChanged;
         }
 
         private void HandleDirectionChanged(Vector2 direction)
         {
-            facingDirection = direction;
-            OnDirectionChanged?.Invoke(facingDirection);
+            _facingDirection = direction;
+            OnDirectionChanged?.Invoke(_facingDirection);
         }
     }
 }

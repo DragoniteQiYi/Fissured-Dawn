@@ -162,7 +162,7 @@ namespace FissuredDawn.Scope.Exploration.Generated.Character
                 return;
 
             // 结束交互
-            _currentInteractable.OnInteractionCompleted(gameObject);
+            _currentInteractable.OnInteractionComplete(gameObject);
             _isInteracting = false;
 
             Debug.Log($"结束与 {_currentTarget?.name} 的交互");
@@ -275,6 +275,11 @@ namespace FissuredDawn.Scope.Exploration.Generated.Character
             return false;
         }
 
+        /// <summary>
+        /// 检测目标是否被墙壁阻挡
+        /// </summary>
+        /// <param name="target"></param>
+        /// <returns></returns>
         private bool IsObstructed(GameObject target)
         {
             if (_obstructionLayerMask == 0)
@@ -378,7 +383,7 @@ namespace FissuredDawn.Scope.Exploration.Generated.Character
                 _currentInteractable.OnDeactivate(gameObject);
                 if (_isInteracting)
                 {
-                    _currentInteractable.OnInteractionCompleted(gameObject);
+                    _currentInteractable.OnInteractionComplete(gameObject);
                     _isInteracting = false;
                 }
             }

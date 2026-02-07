@@ -1,7 +1,7 @@
 using Cysharp.Threading.Tasks;
-using FissuredDawn.Global;
 using FissuredDawn.Global.GameServices;
 using FissuredDawn.Global.Interfaces.GameServices;
+using FissuredDawn.Infrastructure.DI;
 using FissuredDawn.Scope.Exploration.Interfaces;
 using FissuredDawn.Shared.Enums.Exploration;
 using System;
@@ -11,6 +11,11 @@ using VContainer;
 
 namespace FissuredDawn.Scope.Exploration.Designer.Trigger
 {
+    /*
+     *  我预留了TriggerType这一类型以应对需要即时触发的场景
+     *  比如在游戏启动时直接加载到标题画面而无需交互
+     *  注意：场景切换对性能敏感，必须要异步启动
+     */
     public class SceneTrigger : MonoBehaviour, ITrigger
     {
         [SerializeField] private string _name = string.Empty;
@@ -23,7 +28,8 @@ namespace FissuredDawn.Scope.Exploration.Designer.Trigger
         // 注入的服务
         private ISceneLoader _sceneLoader;
 
-        public event Action OnTrigger;
+        public event Action OnTriggerEnter;
+        public event Action OnTriggerExit;
 
         private void Start()
         {
@@ -37,6 +43,8 @@ namespace FissuredDawn.Scope.Exploration.Designer.Trigger
             }
         }
 
+        public virtual void Execute() { }
+
         public async UniTask ExecuteAsync()
         {
             if (!_enabled || string.IsNullOrEmpty(_sceneId))
@@ -45,7 +53,7 @@ namespace FissuredDawn.Scope.Exploration.Designer.Trigger
                 return;
             }
 
-            OnTrigger?.Invoke();
+            OnTriggerEnter?.Invoke();
             await LoadTargetScene();
         }
 
@@ -56,7 +64,7 @@ namespace FissuredDawn.Scope.Exploration.Designer.Trigger
             // 等待场景加载器初始化完成
             await WaitForSceneLoaderInitialization();
 
-            OnTrigger?.Invoke();
+            OnTriggerEnter?.Invoke();
             await LoadTargetScene();
         }
 

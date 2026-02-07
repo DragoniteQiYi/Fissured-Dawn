@@ -15,8 +15,8 @@ MonoBehaviour:
   NodeGraph: {fileID: 11400000}
   Rect:
     serializedVersion: 2
-    x: 948.8004
-    y: 444.39963
+    x: 925.59973
+    y: 428.39966
     width: 190
     height: 135
   IsDragging: 1
@@ -47,8 +47,8 @@ MonoBehaviour:
   NodeGraph: {fileID: 11400000}
   Rect:
     serializedVersion: 2
-    x: 95.200134
-    y: 295.59958
+    x: 72.00012
+    y: 279.59998
     width: 190
     height: 135
   IsDragging: 1
@@ -103,8 +103,8 @@ MonoBehaviour:
   NodeGraph: {fileID: 11400000}
   Rect:
     serializedVersion: 2
-    x: 612.8002
-    y: 313.99966
+    x: 589.60016
+    y: 297.99988
     width: 190
     height: 135
   IsDragging: 1
@@ -135,8 +135,8 @@ MonoBehaviour:
   NodeGraph: {fileID: 11400000}
   Rect:
     serializedVersion: 2
-    x: 390.40015
-    y: 300.39957
+    x: 367.20013
+    y: 284.4001
     width: 190
     height: 135
   IsDragging: 1
@@ -167,12 +167,12 @@ MonoBehaviour:
   NodeGraph: {fileID: 11400000}
   Rect:
     serializedVersion: 2
-    x: 1268.0001
-    y: 337.2
+    x: 1244.7979
+    y: 321.20032
     width: 190
     height: 135
   IsDragging: 1
-  IsSelected: 1
+  IsSelected: 0
   _sentence:
     CharacterName: "\u7262\u5927"
     Text: laoda_05
@@ -200,8 +200,8 @@ MonoBehaviour:
   NodeGraph: {fileID: 11400000}
   Rect:
     serializedVersion: 2
-    x: 957.6002
-    y: 217.19997
+    x: 934.3998
+    y: 201.20006
     width: 190
     height: 135
   IsDragging: 1

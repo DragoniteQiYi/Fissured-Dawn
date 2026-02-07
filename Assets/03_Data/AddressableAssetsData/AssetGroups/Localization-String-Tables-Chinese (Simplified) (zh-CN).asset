@@ -23,6 +23,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Locale-zh-CN
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: dd7021f3975e5684591efaa551fd9418
+    m_Address: Greetings_zh-CN
+    m_ReadOnly: 1
+    m_SerializedLabels:
+    - Locale-zh-CN
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f8dc8f6fd85663340a31cdea2c95754b
     m_Address: New Node Graph_zh-CN
     m_ReadOnly: 1

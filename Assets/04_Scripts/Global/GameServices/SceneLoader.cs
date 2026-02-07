@@ -48,11 +48,11 @@ namespace FissuredDawn.Global.GameServices
 
             try
             {
-                string configPath = ConfigPath.SceneConfigPath;
+                //string configPath = ConfigPath.SceneConfigPath;
 
-                _sceneConfigs = new Dictionary<string, SceneConfig>();
+                //_sceneConfigs = new Dictionary<string, SceneConfig>();
 
-                await LoadSceneConfigsAsync(configPath);
+                await LoadSceneConfigsAsync(ConfigKey.SCENE_CONFIG);
 
                 _isInitialized = true;
                 OnInitialized?.Invoke();
@@ -185,6 +185,9 @@ namespace FissuredDawn.Global.GameServices
             throw new KeyNotFoundException($"未找到场景配置: {sceneId}");
         }
 
+        /*
+         *  不要使用
+         */ 
         public async UniTask PreloadSceneAsync(string sceneId)
         {
             if (!_isInitialized)
@@ -307,25 +310,38 @@ namespace FissuredDawn.Global.GameServices
         {
             try
             {
-                // 异步读取文件
-                string jsonContent;
-                using (var reader = new StreamReader(configPath))
+                //// 异步读取文件
+                //string jsonContent;
+                //using (var reader = new StreamReader(configPath))
+                //{
+                //    jsonContent = await reader.ReadToEndAsync();
+                //    Debug.Log("[SceneLoader]: 已读取场景配置" + jsonContent);
+                //}
+                // 加载 TextAsset
+                AsyncOperationHandle<TextAsset> handle =
+                    Addressables.LoadAssetAsync<TextAsset>(configPath);
+                await handle.Task;
+                if (handle.Status == AsyncOperationStatus.Succeeded)
                 {
-                    jsonContent = await reader.ReadToEndAsync();
-                    Debug.Log("[SceneLoader]: 已读取场景配置" + jsonContent);
-                }
+                    TextAsset jsonContent = handle.Result;
 
-                // 反序列化JSON
-                _sceneConfigs = JsonConvert.DeserializeObject<Dictionary<string, SceneConfig>>(jsonContent);
-                foreach (var sceneConfig in _sceneConfigs)
-                {
-                    Debug.Log(sceneConfig.Key + ": " + sceneConfig.Value);
-                }
+                    // 反序列化JSON
+                    _sceneConfigs = JsonConvert.
+                        DeserializeObject<Dictionary<string, SceneConfig>>(jsonContent.text);
+                    foreach (var sceneConfig in _sceneConfigs)
+                    {
+                        Debug.Log(sceneConfig.Key + ": " + sceneConfig.Value);
+                    }
 
-                if (_sceneConfigs.Count == 0)
-                {
-                    Debug.LogWarning("[SceneLoader]: 场景配置文件为空或格式不正确");
+                    if (_sceneConfigs.Count == 0)
+                    {
+                        Debug.LogWarning("[SceneLoader]: 场景配置文件为空或格式不正确");
+                    }
                 }
+                else
+                {
+                    Debug.LogError($"[SceneLoader]: 加载失败: {handle.OperationException}");
+                } 
             }
             catch (Exception ex)
             {
@@ -333,8 +349,6 @@ namespace FissuredDawn.Global.GameServices
                 throw;
             }
         }
-
-
 
         private async UniTask LoadSceneAsync(string scenePath, LoadSceneMode loadMode,
             IProgress<float> progress, CancellationToken cancellationToken)

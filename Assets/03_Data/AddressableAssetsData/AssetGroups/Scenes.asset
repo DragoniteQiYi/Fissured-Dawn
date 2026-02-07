@@ -18,12 +18,7 @@ MonoBehaviour:
   m_GUID: e3a7211f1378c5841a06e880df56cb90
   m_SerializeEntries:
   - m_GUID: 8c9cfa26abfee488c85f1582747f6a02
-    m_Address: Scenes/Test/Test/SampleScene
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e259a2aef8fe12f41b49fb52cb7f791a
-    m_Address: Scenes/Technic/Startup
+    m_Address: Scenes/Town/SampleScene
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

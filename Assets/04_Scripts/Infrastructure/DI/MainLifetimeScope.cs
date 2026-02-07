@@ -2,7 +2,6 @@
 using FissuredDawn.Global.GameManagers;
 using FissuredDawn.Global.GameServices;
 using FissuredDawn.Global.Interfaces.GameManagers;
-using FissuredDawn.Global.Interfaces.GameServices;
 using FissuredDawn.Infrastructure.Startup;
 using UnityEngine;
 using VContainer;
@@ -14,6 +13,8 @@ namespace FissuredDawn.Infrastructure.DI
     {
         #region MonoBehaviour依赖
         [SerializeField] private InputManager _inputManager;
+        [SerializeField] private DialogManager _dialogManager;
+        [SerializeField] private UIManager _uiManager;
         #endregion
 
         protected override void Configure(IContainerBuilder builder)
@@ -24,15 +25,23 @@ namespace FissuredDawn.Infrastructure.DI
             builder.UseComponents(components =>
             {
                 components.AddInNewPrefab(_inputManager, Lifetime.Singleton)
-                    .UnderTransform(gameObject.transform)
+                    .UnderTransform(transform)
                     .As<IInputManager>()
+                    .AsSelf();
+                components.AddInNewPrefab(_dialogManager, Lifetime.Singleton)
+                    .UnderTransform(transform)
+                    .As<IDialogManager>()
+                    .AsSelf();
+                components.AddInNewPrefab(_uiManager, Lifetime.Singleton)
+                    .UnderTransform(transform)
+                    .As<IUIManager>()
                     .AsSelf();
             });
 
             // 注册纯C#类
             builder.Register<SceneLoader>(Lifetime.Singleton)
                 .AsImplementedInterfaces()
-                .AsSelf();
+                .AsSelf();      
 
             // 注册初始化器
             builder.RegisterEntryPoint<MainStartupConfiguration>();

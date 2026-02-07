@@ -3,19 +3,26 @@ using UnityEngine;
 
 namespace FissuredDawn.Data.Exploration
 {
-    public abstract class MapEntity : MonoBehaviour
+    /*
+     *  这曾是一个抽象类
+     *  直到开发者发现衍生出一堆子类屁用没有
+     *  反正它们都不包含业务逻辑
+     *  如果一个对象可交互，那么它必定是一个MapEntity
+     *  但Trigger可以独立于MapEntity存在
+     */
+    public class MapEntity : MonoBehaviour
     {
         [Header("实体基础数据")]
-        [SerializeField] protected string entityId;
-        [SerializeField] protected EntityType entityType;
-        [SerializeField] protected string displayName;
-        [SerializeField] protected string description;
+        [SerializeField] private string _entityId;
+        [SerializeField] private EntityType _entityType;
+        [SerializeField] private string _displayName;
+        [SerializeField] private string _description;
 
         [Header("实体状态")]
-        [SerializeField] protected EntityState currentState = EntityState.Idle;
-        [SerializeField] protected Vector2 facingDirection = new(0, 0);
-        [SerializeField] protected bool isVisible = true;
-        [SerializeField] protected bool isPersistent = false;
+        [SerializeField] private EntityState _currentState = EntityState.Idle;
+        [SerializeField] private Vector2 _facingDirection = new(0, 0);
+        [SerializeField] private bool _isVisible = true;
+        [SerializeField] private bool _isPersistent = false;
 
         // 基础事件
         public event Action<EntityState, EntityState> OnStateChanged;
@@ -23,18 +30,18 @@ namespace FissuredDawn.Data.Exploration
         public event Action<MapEntity> OnEntityDisabled;
 
         // 基础属性
-        public string EntityId => entityId;
-        public EntityType EntityType => entityType;
-        public EntityState CurrentState => currentState;
-        public Vector2 FacingDirection => facingDirection;
-        public string DisplayName => displayName;
+        public string EntityId => _entityId;
+        public EntityType EntityType => _entityType;
+        public EntityState CurrentState => _currentState;
+        public Vector2 FacingDirection => _facingDirection;
+        public string DisplayName => _displayName;
 
         protected virtual void Awake()
         {
             // 确保有唯一的ID
-            if (string.IsNullOrEmpty(entityId))
+            if (string.IsNullOrEmpty(_entityId))
             {
-                entityId = $"{entityType}_{Guid.NewGuid().ToString("N")[..8]}";
+                _entityId = $"{_entityType}_{Guid.NewGuid().ToString("N")[..8]}";
             }
         }
 
@@ -59,11 +66,11 @@ namespace FissuredDawn.Data.Exploration
         // 状态管理
         public virtual bool SetState(EntityState newState)
         {
-            if (currentState == newState) return false;
+            if (_currentState == newState) return false;
 
-            var previousState = currentState;
-            currentState = newState;
-            OnStateChanged?.Invoke(previousState, currentState);
+            var previousState = _currentState;
+            _currentState = newState;
+            OnStateChanged?.Invoke(previousState, _currentState);
             return true;
         }
     }
