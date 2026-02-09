@@ -9,6 +9,7 @@ namespace cherrydev
         [SerializeField] private TextMeshProUGUI _dialogNameText;
         [SerializeField] private TextMeshProUGUI _dialogText;
         [SerializeField] private Image _dialogCharacterImage;
+        [SerializeField] private Image _dialogArrow;
 
         private string _currentFullText;
         
@@ -56,6 +57,22 @@ namespace cherrydev
             _dialogCharacterImage.color = new Color(_dialogCharacterImage.color.r,
                 _dialogCharacterImage.color.g, _dialogCharacterImage.color.b, 255);
             _dialogCharacterImage.sprite = sprite;
+        }
+
+        /// <summary>
+        /// 展示指示箭头
+        /// </summary>
+        public void ShowArrow()
+        {
+            _dialogArrow.gameObject.SetActive(true);
+        }
+
+        /// <summary>
+        /// 展示指示箭头
+        /// </summary>
+        public void HideArrow()
+        {
+            _dialogArrow.gameObject.SetActive(false);
         }
     }
 }

@@ -18,6 +18,7 @@ namespace cherrydev
     {
         [SerializeField] private float _dialogCharDelay;
         [SerializeField] private bool _isCanSkippingText = true;
+        [SerializeField] private float _interactionCooldown = 0.0025f;
 #if UNITY_LOCALIZATION
         [SerializeField] private bool _reloadTextOnLanguageChange = true;
 #endif
@@ -52,6 +53,7 @@ namespace cherrydev
 #pragma warning disable CS0414
         private bool _isCurrentSentenceTyping;
 #pragma warning restore CS0414
+        private float _interactionCooldownTimer;
 
         private readonly List<string> _boundFunctionNames = new();
 
@@ -97,6 +99,10 @@ namespace cherrydev
         private void Start()
         {
             _inputManager = GlobalServiceLocator.Container.Resolve<IInputManager>();
+            if (_inputManager != null)
+            {
+                _inputManager.OnInteractPressed += HandleSentenceSkipping;
+            }
         }
 
         private void OnEnable()
@@ -105,10 +111,6 @@ namespace cherrydev
             if (_reloadTextOnLanguageChange)
                 LocalizationSettings.SelectedLocaleChanged += OnSelectedLocaleChanged;
 #endif
-            if (_inputManager != null)
-            {
-                _inputManager.OnInteractPressed += HandleSentenceSkipping;
-            }     
         }
 
 #if UNITY_LOCALIZATION
@@ -164,7 +166,13 @@ namespace cherrydev
             }
         }
 
-        //private void Update() => HandleSentenceSkipping();
+        private void Update()
+        {
+            if (_interactionCooldownTimer > 0)
+            {
+                _interactionCooldownTimer -= Time.deltaTime;
+            }
+        }
 
         /// <summary>
         /// Disable dialog panel
@@ -660,12 +668,11 @@ namespace cherrydev
             bool doNextSentence = false;
             Action nextSentence = () =>
             {
-                // 只有不在打字时才允许下一句
                 if (!_isCurrentSentenceTyping)
                 {
-                    Debug.Log("[DialogBehaviour]: 直接显示当前对话语句");
+                    Debug.Log("[DialogBehaviour]: 下一句");
                     doNextSentence = true;
-                }
+                } 
             };
             _inputManager.OnInteractReleased += nextSentence;
 
@@ -686,7 +693,7 @@ namespace cherrydev
             _isCurrentSentenceTyping = false;
             SentenceEnded?.Invoke();
 
-            yield return new WaitUntil(() => doNextSentence && IsActive);
+            yield return new WaitUntil(() => doNextSentence && IsActive && _interactionCooldownTimer <= 0);
             _inputManager.OnInteractReleased -= nextSentence;
 
             CheckForDialogNextNode();
@@ -766,8 +773,14 @@ namespace cherrydev
             Debug.Log("[DialogBehaviour]: 尝试跳过对话");
             //if (CheckNextSentenceKeyCodes() && !_isCurrentSentenceSkipped)
             //    _isCurrentSentenceSkipped = true;
-            if (!_isCurrentSentenceSkipped)
-                _isCurrentSentenceSkipped = true;
+            if (_isCurrentSentenceSkipped)
+                return;
+            _isCurrentSentenceSkipped = true;
+
+            if (_isCurrentSentenceTyping)
+            {
+                _interactionCooldownTimer = _interactionCooldown;
+            }   
         }
     }
 }

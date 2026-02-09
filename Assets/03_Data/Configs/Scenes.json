@@ -12,7 +12,7 @@
         "children": []
     },
     "Scenes/Town/SampleScene":{
-        "name":"测试场景",
+        "name":"测试城镇",
         "bgmId": null,
         "sceneType": 0,
         "children": []

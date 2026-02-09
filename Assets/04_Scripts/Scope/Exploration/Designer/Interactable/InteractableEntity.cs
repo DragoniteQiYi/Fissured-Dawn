@@ -27,7 +27,7 @@ namespace FissuredDawn.Scope.Exploration.Interactable
         [field: SerializeField] public LayerMask ObstructionLayers { get; private set; }
         [field: SerializeField] public bool SupportsAlternateInteraction { get; private set; }
 
-        // 为什么不用Awake：确保比依赖组件更晚初始化
+        // 为什么不用Awake：确保比其依赖组件更晚初始化
         private void Start()
         {
             OnInitialized();

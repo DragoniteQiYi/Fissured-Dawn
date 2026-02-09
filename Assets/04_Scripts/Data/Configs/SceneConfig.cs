@@ -5,19 +5,17 @@ using UnityEngine.SceneManagement;
 
 namespace FissuredDawn.Data.Configs
 {
+    /*
+     *  不需要场景ID，因为键本身就是ID
+     */
     /// <summary>
     /// 场景配置
     /// </summary>
     [Serializable]
     public class SceneConfig
     {
-        ///// <summary>
-        ///// 场景ID
-        ///// </summary>
-        //public string Id;
-
         /// <summary>
-        /// 场景名
+        /// 场景名（仅用于标识）
         /// </summary>
         public string SceneName;
 
@@ -40,5 +38,10 @@ namespace FissuredDawn.Data.Configs
         /// 子场景
         /// </summary>
         public List<string> Children;
+
+        /// <summary>
+        /// 是否预加载资源
+        /// </summary>
+        public bool PreloadAssets;
     }
 }

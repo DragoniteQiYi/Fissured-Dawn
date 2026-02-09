@@ -34,6 +34,9 @@ namespace FissuredDawn.UI.Presenters
             _dialogBehaviour.DialogTextCharWrote += _dialogSentencePanel.IncreaseMaxVisibleCharacters;
             _dialogBehaviour.DialogTextSkipped += _dialogSentencePanel.ShowFullDialogText;
 
+            _dialogBehaviour.SentenceStarted += _dialogSentencePanel.HideArrow;
+            _dialogBehaviour.SentenceEnded += _dialogSentencePanel.ShowArrow;
+
             _dialogBehaviour.SentenceNodeActivated += EnableDialogSentencePanel;
             _dialogBehaviour.SentenceNodeActivated += DisableDialogAnswerPanel;
             _dialogBehaviour.SentenceNodeActivated += _dialogSentencePanel.ResetDialogText;
@@ -58,6 +61,9 @@ namespace FissuredDawn.UI.Presenters
 
             _dialogBehaviour.DialogTextCharWrote -= _dialogSentencePanel.IncreaseMaxVisibleCharacters;
             _dialogBehaviour.DialogTextSkipped -= _dialogSentencePanel.ShowFullDialogText;
+
+            _dialogBehaviour.SentenceStarted -= _dialogSentencePanel.HideArrow;
+            _dialogBehaviour.SentenceEnded -= _dialogSentencePanel.ShowArrow;
 
             _dialogBehaviour.SentenceNodeActivated -= EnableDialogSentencePanel;
             _dialogBehaviour.SentenceNodeActivated -= DisableDialogAnswerPanel;
