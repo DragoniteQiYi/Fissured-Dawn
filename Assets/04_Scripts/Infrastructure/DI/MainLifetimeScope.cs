@@ -2,6 +2,7 @@
 using FissuredDawn.Global.GameManagers;
 using FissuredDawn.Global.GameServices;
 using FissuredDawn.Global.Interfaces.GameManagers;
+using FissuredDawn.Global.Interfaces.GameServices;
 using FissuredDawn.Infrastructure.Startup;
 using UnityEngine;
 using VContainer;
@@ -15,6 +16,8 @@ namespace FissuredDawn.Infrastructure.DI
         [SerializeField] private InputManager _inputManager;
         [SerializeField] private DialogManager _dialogManager;
         [SerializeField] private UIManager _uiManager;
+        [SerializeField] private AudioManager _audioManager;
+        [SerializeField] private SceneLoader _sceneLoader;
         #endregion
 
         protected override void Configure(IContainerBuilder builder)
@@ -36,12 +39,17 @@ namespace FissuredDawn.Infrastructure.DI
                     .UnderTransform(transform)
                     .As<IUIManager>()
                     .AsSelf();
+                components.AddInNewPrefab(_audioManager, Lifetime.Singleton)
+                    .UnderTransform(transform)
+                    .As<IAudioManager>()
+                    .AsSelf();
+                components.AddInNewPrefab(_sceneLoader, Lifetime.Singleton)
+                    .UnderTransform(transform)
+                    .As<ISceneLoader>()
+                    .AsSelf();
             });
 
             // 注册纯C#类
-            builder.Register<SceneLoader>(Lifetime.Singleton)
-                .AsImplementedInterfaces()
-                .AsSelf();      
 
             // 注册初始化器
             builder.RegisterEntryPoint<MainStartupConfiguration>();

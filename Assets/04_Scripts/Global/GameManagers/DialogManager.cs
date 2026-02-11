@@ -1,13 +1,15 @@
 using cherrydev;
 using FissuredDawn.Global.Interfaces.GameManagers;
+using FissuredDawn.Shared.Constants;
 using System;
 using UnityEngine;
+using VContainer;
 
 namespace FissuredDawn.Global.GameManagers
 {
     /*
      *  它唯一的作用是呼出对话系统并提供对外接口
-     *  不要让它处理对话业务
+     *  不要让它处理对话业务逻辑
      */
     public class DialogManager : MonoBehaviour, IDialogManager
     {
@@ -18,12 +20,25 @@ namespace FissuredDawn.Global.GameManagers
 
         public event Action OnDialogStart;
         public event Action OnDialogPause;
+        public event Action OnDialogTyping;
         public event Action OnDialogResume;
         public event Action OnDialogEnd;
+
+        [Inject] private IAudioManager _audioManager;
+
+        private void Start()
+        {
+            if (_audioManager != null)
+            {
+                OnDialogStart += () => _audioManager.PlaySound(AudioResource.UI_DIALOG_OPEN);
+                OnDialogTyping += () => _audioManager.PlaySound(AudioResource.UI_DIALOG_TYPE);
+            }
+        }
 
         public void Initialize()
         {
             _dialogBehaviour = GetComponent<DialogBehaviour>();
+            _dialogBehaviour.DialogTextCharWrote += HandleSentenceTyping;
             Debug.Log("[DialogManger]: 对话管理器已初始化");
         }
 
@@ -45,13 +60,9 @@ namespace FissuredDawn.Global.GameManagers
             OnDialogResume?.Invoke();
         }
 
-        /// <summary>
-        /// 看看再说，还没到这个功能，不确定是否用它
-        /// </summary>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public void ModifyConfig()
+        private void HandleSentenceTyping()
         {
-            throw new System.NotImplementedException();
+            OnDialogTyping?.Invoke();
         }
 
         private void EndDialog()

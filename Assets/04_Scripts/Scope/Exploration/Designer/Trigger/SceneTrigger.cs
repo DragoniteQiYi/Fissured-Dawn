@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
-using FissuredDawn.Global.GameServices;
-using FissuredDawn.Global.Interfaces.GameServices;
+using FissuredDawn.Global.GameManagers;
+using FissuredDawn.Global.Interfaces.GameManagers;
 using FissuredDawn.Infrastructure.DI;
 using FissuredDawn.Scope.Exploration.Interfaces;
 using FissuredDawn.Shared.Enums.Exploration;

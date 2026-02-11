@@ -11,6 +11,7 @@ namespace FissuredDawn.Global.Interfaces.GameManagers
 
         event Action OnDialogStart;
         event Action OnDialogPause;
+        event Action OnDialogTyping;
         event Action OnDialogResume;
         event Action OnDialogEnd;
 
@@ -34,10 +35,5 @@ namespace FissuredDawn.Global.Interfaces.GameManagers
         /// ª÷∏¥∂‘ª∞
         /// </summary>
         void ResumeDialog();
-
-        /// <summary>
-        /// –ﬁ∏ƒ≈‰÷√
-        /// </summary>
-        void ModifyConfig();
     }
 }

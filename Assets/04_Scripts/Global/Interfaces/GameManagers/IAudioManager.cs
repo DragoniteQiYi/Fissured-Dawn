@@ -1,16 +1,18 @@
+using Cysharp.Threading.Tasks;
+using FissuredDawn.Data.Configs;
+using System;
+using UnityEngine;
+
 namespace FissuredDawn.Global.Interfaces.GameManagers
 {
     public interface IAudioManager
     {
-        /// <summary>
-        /// “Ù¿÷“Ù¡ø
-        /// </summary>
-        float MusicVolume { get; set; }
+        event Action OnMusicLoaded;
 
         /// <summary>
-        /// “Ù–ß“Ù¡ø
+        /// ≥ı ºªØ
         /// </summary>
-        float SoundVolume { get; set; }
+        void Initialize();
 
         /// <summary>
         /// ≤•∑≈“Ù¿÷
@@ -26,7 +28,8 @@ namespace FissuredDawn.Global.Interfaces.GameManagers
         /// <param name="clipName">“Ù∆µ∆¨∂Œ√˚≥∆</param>
         /// <param name="volume">“Ù¡ø (0-1)</param>
         /// <param name="pitch">“Ùµ˜</param>
-        void PlaySound(string clipName, float volume = 1f, float pitch = 1f);
+        void PlaySound(string clipName, float volumeMultiplier = 1, float pitch = 1,
+            Transform parent = null);
 
         /// <summary>
         /// Õ£÷π±≥æ∞“Ù¿÷
@@ -53,6 +56,11 @@ namespace FissuredDawn.Global.Interfaces.GameManagers
         /// ‘§º”‘ÿ“Ù∆µ◊ ‘¥
         /// </summary>
         /// <param name="clipName">“Ù∆µ∆¨∂Œ√˚≥∆</param>
-        void PreloadAudio(string clipName);
+        UniTask PreloadAudio(string clipName);
+
+        /// <summary>
+        /// Õ£÷πÀ˘”–“Ù∆µ≤•∑≈
+        /// </summary>
+        void StopAllSounds();
     }
 }

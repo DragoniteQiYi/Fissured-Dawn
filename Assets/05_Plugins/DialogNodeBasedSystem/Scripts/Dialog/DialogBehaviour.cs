@@ -208,6 +208,7 @@ namespace cherrydev
             _onDialogStarted?.Invoke();
             _currentNodeGraph = dialogNodeGraph;
 
+            Debug.Log("[DialogBehaviour]: 初始化对话图表...");
             InitializeVariablesHandler(dialogNodeGraph);
             
             onVariablesHandlerInitialized?.Invoke(_variablesHandler);

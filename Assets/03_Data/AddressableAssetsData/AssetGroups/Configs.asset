@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 7b0e5baac68f52948b95134d5e9f5546
   m_SerializeEntries:
+  - m_GUID: 309eb58df7786c94f80f71e9020d76c6
+    m_Address: Configs/Audio
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b2e0f6e8538cecf4794b5c782befd042
     m_Address: Configs/Scenes
     m_ReadOnly: 0

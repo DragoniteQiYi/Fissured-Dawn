@@ -1,0 +1,32 @@
+{
+    "Audio/UI/DialogType":
+    {
+        "name": "UI-对话文本",
+        "groupType": "UI",
+        "priority": 255
+    },
+    "Audio/UI/DialogOpen":
+    {
+        "name": "UI-对话框",
+        "groupType": "UI",
+        "priority": 256
+    },
+    "Audio/UI/Click":
+    {
+        "name": "UI-点击",
+        "groupType": "UI",
+        "priority": 256
+    },
+    "Audio/UI/Confirm":
+    {
+        "name": "UI-确认",
+        "groupType": "UI",
+        "priority": 256  
+    },
+    "Audio/UI/Error":
+    {
+        "name": "UI-错误",
+        "groupType": "UI",
+        "priority": 256
+    }
+}

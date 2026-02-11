@@ -17,7 +17,7 @@ namespace FissuredDawn.Data.Configs
         /// <summary>
         /// 场景名（仅用于标识）
         /// </summary>
-        public string SceneName;
+        public string Name;
 
         /// <summary>
         /// 场景BGM_ID

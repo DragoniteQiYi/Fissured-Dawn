@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
 using FissuredDawn.Global.Interfaces;
-using FissuredDawn.Global.Interfaces.GameServices;
+using FissuredDawn.Global.Interfaces.GameManagers;
 using System;
 using System.Threading;
 using UnityEngine;

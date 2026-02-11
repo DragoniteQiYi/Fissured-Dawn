@@ -21,10 +21,12 @@ namespace FissuredDawn.Infrastructure.Startup
         [Inject] private readonly IInputManager _inputManager;
         [Inject] private readonly IDialogManager _dialogManager;
         [Inject] private readonly IUIManager _uiManager;
+        [Inject] private readonly IAudioManager _audioManager;
+        [Inject] private readonly ISceneLoader _sceneLoader;
         #endregion
 
         #region ´¿C#Àà
-        [Inject] private readonly ISceneLoader _sceneLoader;
+
         #endregion
 
         public void Start()
@@ -39,6 +41,7 @@ namespace FissuredDawn.Infrastructure.Startup
             _inputManager.Initialize();
             _dialogManager.Initialize();
             _uiManager.Initialize();
+            _audioManager.Initialize();
         }
 
         private async UniTaskVoid InitializeAsync()

@@ -14,6 +14,9 @@ namespace FissuredDawn.Shared.Constants
         /// </summary>
         public const string SCENE_CONFIG = "Configs/Scenes";
 
-        // public const string AUDIO_CONFIG = ""; → 不可以这样写！
+        /// <summary>
+        /// 音频配置
+        /// </summary>
+        public const string AUDIO_CONFIG = "Configs/Audio";
     }
 }

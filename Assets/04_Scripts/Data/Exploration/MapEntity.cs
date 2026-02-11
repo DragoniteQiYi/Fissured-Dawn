@@ -5,7 +5,7 @@ namespace FissuredDawn.Data.Exploration
 {
     /*
      *  这曾是一个抽象类
-     *  直到开发者发现衍生出一堆子类屁用没有
+     *  直到本人发现衍生出一堆子类屁用没有
      *  反正它们都不包含业务逻辑
      *  如果一个对象可交互，那么它必定是一个MapEntity
      *  但Trigger可以独立于MapEntity存在

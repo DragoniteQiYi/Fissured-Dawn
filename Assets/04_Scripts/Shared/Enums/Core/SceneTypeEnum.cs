@@ -11,33 +11,13 @@ namespace FissuredDawn.Shared.Enums.Core
         Technic = 0,
 
         /// <summary>
-        /// 城镇场景
+        /// 探索场景
         /// </summary>
-        Town = 1,
-
-        /// <summary>
-        /// 野外场景
-        /// </summary>
-        Field = 2,
-
-        /// <summary>
-        /// 迷宫场景
-        /// </summary>
-        Dungeon = 3,
-
-        /// <summary>
-        /// 室内场景
-        /// </summary>
-        Indoor = 4,
+        Exploration = 1,
 
         /// <summary>
         /// 战斗场景
         /// </summary>
-        Battle = 5,
-
-        /// <summary>
-        /// 小游戏场景
-        /// </summary>
-        MiniGame = 6
+        Battle = 2
     }
 }

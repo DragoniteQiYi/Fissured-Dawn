@@ -12,13 +12,13 @@ namespace FissuredDawn.Global.GameManagers
         [SerializeField] private Canvas _hudCanvas;
         [SerializeField] private Canvas _backgroundCanvas;
 
-        private bool _isCanvasActive;
-        private bool _isWindowCanvasActive;
-        private bool _isPopupCanvasActive;
-        private bool _isHudCanvasActive;
-        private bool _isBackgroundCanvasActive;
+        public bool IsCanvasActive { get; private set; }
+        public bool IsWindowCanvasActive => _windowCanvas.gameObject.activeSelf;
+        public bool IsPopupCanvasActive => _popupCanvas.gameObject.activeSelf;
+        public bool IsHudCanvasActive => _hudCanvas.gameObject.activeSelf;
+        public bool IsBackgroundCanvasActive => _backgroundCanvas.gameObject.activeSelf;
 
-        [Inject] private IDialogManager _dialogManager;
+        [Inject] private readonly IDialogManager _dialogManager;
 
         private void OnEnable()
         {
@@ -48,14 +48,14 @@ namespace FissuredDawn.Global.GameManagers
                 Debug.LogError("[UIManager]: Canvas预制件为空，检查UI Manager预制体");
                 return;
             }
-            if (_isCanvasActive)
+            if (IsCanvasActive)
             {
                 return;
             }
 
             _canvasPrefab = Instantiate(_canvasPrefab);
             DontDestroyOnLoad(_canvasPrefab);
-            _isCanvasActive = true;
+            IsCanvasActive = true;
         }
 
         #region 私有方法

@@ -2,6 +2,7 @@ using cherrydev;
 using FissuredDawn.Global;
 using FissuredDawn.Global.Interfaces.GameManagers;
 using FissuredDawn.Infrastructure.DI;
+using System.Collections;
 using UnityEngine;
 using VContainer;
 
@@ -37,6 +38,9 @@ namespace FissuredDawn.UI.Presenters
             _dialogBehaviour.SentenceStarted += _dialogSentencePanel.HideArrow;
             _dialogBehaviour.SentenceEnded += _dialogSentencePanel.ShowArrow;
 
+            //_dialogBehaviour.OnDialogStarted.AddListener(_dialogSentencePanel.HandleDialogStart);
+            //_dialogBehaviour.OnDialogFinished.AddListener(_dialogSentencePanel.HandleDialogEnd);
+
             _dialogBehaviour.SentenceNodeActivated += EnableDialogSentencePanel;
             _dialogBehaviour.SentenceNodeActivated += DisableDialogAnswerPanel;
             _dialogBehaviour.SentenceNodeActivated += _dialogSentencePanel.ResetDialogText;
@@ -64,6 +68,9 @@ namespace FissuredDawn.UI.Presenters
 
             _dialogBehaviour.SentenceStarted -= _dialogSentencePanel.HideArrow;
             _dialogBehaviour.SentenceEnded -= _dialogSentencePanel.ShowArrow;
+
+            //_dialogBehaviour.OnDialogStarted.RemoveListener(_dialogSentencePanel.HandleDialogStart);
+            //_dialogBehaviour.OnDialogFinished.RemoveListener(_dialogSentencePanel.HandleDialogEnd);
 
             _dialogBehaviour.SentenceNodeActivated -= EnableDialogSentencePanel;
             _dialogBehaviour.SentenceNodeActivated -= DisableDialogAnswerPanel;
@@ -184,6 +191,23 @@ namespace FissuredDawn.UI.Presenters
                         _dialogAnswerPanel.GetButtonByIndex(i).gameObject.activeSelf)
                         _dialogAnswerPanel.GetButtonTextByIndex(i).text = currentAnswerNode.GetAnswerText(i);
                 }
+            }
+        }
+
+        private IEnumerator HandleActive(GameObject gameObject, bool activeState)
+        {
+            if (activeState == gameObject.activeSelf) 
+                yield break;
+            
+            if (activeState)
+            {
+                gameObject.SetActive(true);
+                yield return StartCoroutine(_dialogSentencePanel.PlayShowAnimation());
+            }
+            else
+            {
+                yield return StartCoroutine(_dialogSentencePanel.PlayHideAnimation());
+                gameObject.SetActive(false);
             }
         }
     }
