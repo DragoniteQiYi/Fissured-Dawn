@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
-using FissuredDawn.Global.GameManagers;
-using FissuredDawn.Global.Interfaces.GameManagers;
+using FissuredDawn.Global.GameServices;
+using FissuredDawn.Global.Interfaces.GameServices;
 using FissuredDawn.Infrastructure.DI;
 using FissuredDawn.Scope.Exploration.Interfaces;
 using FissuredDawn.Shared.Enums.Exploration;
@@ -26,14 +26,14 @@ namespace FissuredDawn.Scope.Exploration.Designer.Trigger
         private UniTaskCompletionSource<bool> _initializationTaskSource;
 
         // 注入的服务
-        private ISceneLoader _sceneLoader;
+        [Inject] private ISceneService _sceneService;
 
         public event Action OnTriggerEnter;
         public event Action OnTriggerExit;
 
         private void Start()
         {
-            _sceneLoader = GlobalServiceLocator.Container.Resolve<ISceneLoader>();
+            _sceneService = GlobalServiceLocator.Container.Resolve<ISceneService>();
             Debug.Log($"[SceneTrigger]：{_name}场景触发器已初始化");
 
             // 如果 TriggerType 是 Immediate，在 Start 时自动执行
@@ -72,7 +72,7 @@ namespace FissuredDawn.Scope.Exploration.Designer.Trigger
         {
             try
             {
-                if (!_sceneLoader.SceneExists(_sceneId))
+                if (!_sceneService.SceneExists(_sceneId))
                 {
                     Debug.LogError($"[SceneTrigger]：场景ID {_sceneId} 不存在");
                     return;
@@ -81,7 +81,7 @@ namespace FissuredDawn.Scope.Exploration.Designer.Trigger
                 Debug.Log($"[SceneTrigger]：开始加载场景 {_sceneId}");
 
                 // 使用CancellationToken.None表示不可取消
-                await _sceneLoader.LoadSceneAsync(_sceneId, CancellationToken.None);
+                await _sceneService.LoadSceneAsync(_sceneId, CancellationToken.None);
 
                 Debug.Log($"[SceneTrigger]：场景 {_sceneId} 加载完成");
             }
@@ -93,14 +93,14 @@ namespace FissuredDawn.Scope.Exploration.Designer.Trigger
 
         private async UniTask WaitForSceneLoaderInitialization()
         {
-            if (_sceneLoader == null)
+            if (_sceneService == null)
             {
                 Debug.LogError($"[SceneTrigger]：场景加载器未找到");
                 return;
             }
 
             // 如果 SceneLoader 实现了初始化状态接口
-            if (_sceneLoader is SceneLoader concreteLoader)
+            if (_sceneService is SceneService concreteLoader)
             {
                 if (concreteLoader.IsInitialized) return;
 

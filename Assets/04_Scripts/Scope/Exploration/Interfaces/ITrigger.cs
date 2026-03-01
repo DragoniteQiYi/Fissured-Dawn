@@ -26,6 +26,6 @@ namespace FissuredDawn.Scope.Exploration.Interfaces
         /// 适用于场景加载等独立线程需求
         /// </summary>
         /// <returns></returns>
-        UniTask ExecuteAsync();
+        // UniTask ExecuteAsync();
     }
 }

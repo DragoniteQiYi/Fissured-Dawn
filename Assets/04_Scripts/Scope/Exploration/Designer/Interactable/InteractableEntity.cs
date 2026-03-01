@@ -10,7 +10,6 @@ namespace FissuredDawn.Scope.Exploration.Interactable
      *  FUCKING BULLSHIT......
      */
     [RequireComponent(typeof(MapEntity))]
-    [RequireComponent(typeof(ITrigger))]
     public class InteractableEntity : MonoBehaviour, IInteractable
     {
         [Header("Ö÷Ìå")]

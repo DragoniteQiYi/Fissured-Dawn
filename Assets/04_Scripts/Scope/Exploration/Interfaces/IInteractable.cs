@@ -7,7 +7,9 @@ namespace FissuredDawn.Scope.Exploration.Interfaces
      * 它只关心通过怎样的方式交互，但不需要知道触发了什么
      * 谁跟我交互？我能交互吗？我有什么行为？
      * IInteractable与ITrigger为严格的单向传递关系
-     * IInteractable的行为由实现类决定，而非枚举对象 → 后记：这句话在放屁！派生类完全是冗余设计！
+     * 【IInteractable的行为由实现类决定，而非枚举对象】 
+     * ↑ 后人有诗赞曰：上面这句话在放屁！派生类完全是冗余设计！
+     * ↑ 它又不管交互后干啥，搞这些有的没的干嘛？
      * 玩家是地图中唯一的交互发起者，所以不需要设计额外接口 → √
      */
     /// <summary>

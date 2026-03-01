@@ -1,9 +1,10 @@
 using Cysharp.Threading.Tasks;
 using FissuredDawn.Data.Configs;
 using FissuredDawn.Global.Interfaces.GameManagers;
+using FissuredDawn.Global.Interfaces.GameServices;
 using FissuredDawn.Shared.Constants;
 using FissuredDawn.Shared.Enums;
-using FissuredDawn.Toolkits;
+using FissuredDawn.Toolkits.Utilities;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -43,7 +44,7 @@ namespace FissuredDawn.Global.GameManagers
         private List<AudioSource> _activeAudioSources = new();
         private bool _audioSystemInitialized = false;
 
-        [Inject] private readonly ISceneLoader _sceneLoader;
+        [Inject] private readonly ISceneService _sceneService;
 
         /// <summary>
         /// 核心音频资源字典
@@ -74,7 +75,7 @@ namespace FissuredDawn.Global.GameManagers
         {
             // 预初始化音频系统
             InitializeAudioSystem();
-            _sceneLoader.OnSceneLoaded += LoadSceneMusic;
+            _sceneService.OnSceneLoaded += LoadSceneMusic;
             Debug.Log("[AudioManager]: 音频系统开始运行");
         }
 

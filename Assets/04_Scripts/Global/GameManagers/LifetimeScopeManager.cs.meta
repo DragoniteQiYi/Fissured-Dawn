@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0b5670649cfff0d4185610e38df7aa0c
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - _technicLifetimeScope: {instanceID: 0}
+  - _explorationLifetimeScope: {fileID: 2456137090681912104, guid: 703e2f86e9a073e4eb1d19342f58ad29, type: 3}
+  - _battleLifetimeScope: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

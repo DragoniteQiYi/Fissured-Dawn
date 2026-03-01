@@ -2,17 +2,15 @@ using Cysharp.Threading.Tasks;
 using FissuredDawn.Data.Configs;
 using FissuredDawn.Global.Interfaces.GameManagers;
 using FissuredDawn.Shared.Constants;
-using FissuredDawn.Toolkits;
+using FissuredDawn.Toolkits.Utilities;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.ResourceManagement.ResourceProviders;
 using UnityEngine.SceneManagement;
-using VContainer.Unity;
 
 namespace FissuredDawn.Global.GameManagers
 {
@@ -184,62 +182,6 @@ namespace FissuredDawn.Global.GameManagers
             return null;
         }
 
-        /*
-         *  不要使用
-         */ 
-        public async UniTask PreloadSceneAsync(string sceneId)
-        {
-            if (!_isInitialized)
-            {
-                throw new InvalidOperationException("[SceneLoader]: 场景加载器未初始化");
-            }
-
-            if (!SceneExists(sceneId))
-            {
-                throw new ArgumentException($"[SceneLoader]: 场景ID '{sceneId}' 不存在");
-            }
-
-            if (_loadedScenes.Contains(sceneId))
-            {
-                Debug.Log($"[SceneLoader]: 场景 {sceneId} 已经预加载过");
-                return;
-            }
-
-            try
-            {
-                var config = GetSceneConfig(sceneId);
-                string scenePath = Path.Combine(ResourcePath.ScenePath, config.Name);
-
-                // 预加载场景（异步加载但不激活）
-                var loadOperation = SceneManager.LoadSceneAsync(scenePath,
-                    new LoadSceneParameters
-                    {
-                        loadSceneMode = LoadSceneMode.Additive,
-                        localPhysicsMode = LocalPhysicsMode.None
-                    });
-
-                if (loadOperation != null)
-                {
-                    loadOperation.allowSceneActivation = false;
-
-                    while (!loadOperation.isDone)
-                    {
-                        await UniTask.Yield();
-                        if (loadOperation.progress >= 0.9f) // 加载到90%时停止
-                            break;
-                    }
-
-                    _loadedScenes.Add(sceneId);
-                    Debug.Log($"[SceneLoader]: 场景 {sceneId} 预加载完成");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.LogError($"[SceneLoader]: 预加载场景 {sceneId} 失败: {ex.Message}");
-                throw;
-            }
-        }
-
         public bool SceneExists(string sceneId)
         {
             if (_sceneConfigs == null)
@@ -335,10 +277,6 @@ namespace FissuredDawn.Global.GameManagers
             GC.Collect();
             await Resources.UnloadUnusedAssets();
         }
-        #endregion
-
-        #region 析构函数和资源清理
-
         #endregion
     }
 }

@@ -27,7 +27,7 @@ namespace cherrydev
         [SerializeField] private UnityEvent _onDialogStarted;
         [SerializeField] private UnityEvent _onDialogFinished;
 
-        private IInputManager _inputManager;
+        [Inject] private readonly IInputManager _inputManager;
 
         private DialogNodeGraph _currentNodeGraph;
         private Node _currentNode;
@@ -98,10 +98,14 @@ namespace cherrydev
 
         private void Start()
         {
-            _inputManager = GlobalServiceLocator.Container.Resolve<IInputManager>();
+            // _inputManager = GlobalServiceLocator.Container.Resolve<IInputManager>();
             if (_inputManager != null)
             {
                 _inputManager.OnInteractPressed += HandleSentenceSkipping;
+            }
+            else
+            {
+                Debug.LogError("FA°·Q!");
             }
         }
 

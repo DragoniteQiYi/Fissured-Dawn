@@ -41,12 +41,6 @@ namespace FissuredDawn.Global.Interfaces.GameManagers
         SceneConfig GetSceneConfig(string sceneId);
 
         /// <summary>
-        /// 预加载场景资源
-        /// </summary>
-        /// <param name="sceneId">场景ID</param>
-        UniTask PreloadSceneAsync(string sceneId);
-
-        /// <summary>
         /// 卸载场景
         /// </summary>
         /// <param name="sceneId">场景ID</param>

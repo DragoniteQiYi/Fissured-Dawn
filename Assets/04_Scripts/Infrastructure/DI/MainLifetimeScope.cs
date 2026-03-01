@@ -1,5 +1,4 @@
-﻿using FissuredDawn.Global;
-using FissuredDawn.Global.GameManagers;
+﻿using FissuredDawn.Global.GameManagers;
 using FissuredDawn.Global.GameServices;
 using FissuredDawn.Global.Interfaces.GameManagers;
 using FissuredDawn.Global.Interfaces.GameServices;
@@ -10,6 +9,9 @@ using VContainer.Unity;
 
 namespace FissuredDawn.Infrastructure.DI
 {
+    /*
+     *  [LifetimeScope]: 我的存在，就是为了把全局单例和上帝类摁在地上摩擦！
+     */
     public class MainLifetimeScope : LifetimeScope
     {
         #region MonoBehaviour依赖
@@ -17,7 +19,7 @@ namespace FissuredDawn.Infrastructure.DI
         [SerializeField] private DialogManager _dialogManager;
         [SerializeField] private UIManager _uiManager;
         [SerializeField] private AudioManager _audioManager;
-        [SerializeField] private SceneLoader _sceneLoader;
+        [SerializeField] private LifetimeScopeManager _lifetimeScopeManager;
         #endregion
 
         protected override void Configure(IContainerBuilder builder)
@@ -43,13 +45,19 @@ namespace FissuredDawn.Infrastructure.DI
                     .UnderTransform(transform)
                     .As<IAudioManager>()
                     .AsSelf();
-                components.AddInNewPrefab(_sceneLoader, Lifetime.Singleton)
+                components.AddInNewPrefab(_lifetimeScopeManager, Lifetime.Singleton)
                     .UnderTransform(transform)
-                    .As<ISceneLoader>()
+                    .As<ILifetimeScopeManager>()
                     .AsSelf();
             });
 
             // 注册纯C#类
+            builder.Register<SceneService>(Lifetime.Singleton)
+                .As<ISceneService>()
+                .AsSelf();
+            builder.Register<InjectService>(Lifetime.Singleton)
+                .As<IInjectService>()
+                .AsSelf();
 
             // 注册初始化器
             builder.RegisterEntryPoint<MainStartupConfiguration>();
@@ -59,6 +67,9 @@ namespace FissuredDawn.Infrastructure.DI
         {
             base.Awake();
             GlobalServiceLocator.SetContainer(Container);
+
+            // 自己注入自己，避免那些蠢货组件找不着北
+            Container.InjectGameObject(gameObject);
         }
     }
 }

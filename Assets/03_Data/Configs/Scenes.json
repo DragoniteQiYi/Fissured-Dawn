@@ -14,7 +14,7 @@
     "Scenes/Town/SampleScene":{
         "name":"测试城镇",
         "bgmId": "Audio/Music/PokemonSquare",
-        "sceneType": 0,
+        "sceneType": 1,
         "children": []
     }
 }

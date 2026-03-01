@@ -1,7 +1,6 @@
 using cherrydev;
 using Cysharp.Threading.Tasks;
 using FissuredDawn.Global.Interfaces.GameManagers;
-using FissuredDawn.Infrastructure.DI;
 using FissuredDawn.Scope.Exploration.Interfaces;
 using System;
 using UnityEngine;
@@ -14,14 +13,14 @@ namespace FissuredDawn.Scope.Exploration.Designer.Trigger
         [Header("¶Ô»°Í¼±í")]
         [SerializeField] private DialogNodeGraph _dialogNodeGraph;
 
-        private IDialogManager _dialogManager;
+        [Inject] private readonly IDialogManager _dialogManager;
 
         public event Action OnTriggerEnter;
         public event Action OnTriggerExit;
 
         private void Start()
         {
-            _dialogManager = GlobalServiceLocator.Container.Resolve<IDialogManager>();
+            // _dialogManager = GlobalServiceLocator.Container.Resolve<IDialogManager>();
         }
 
         public void Execute()
